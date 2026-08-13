@@ -5,8 +5,8 @@ import { useEffect } from "react";
 export default function PWARegistration() {
   useEffect(() => {
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-      // Se estiver em desenvolvimento, desregistrar o Service Worker para evitar cache de HMR/Turbopack
-      if (process.env.NODE_ENV === "development") {
+      // Se estiver em desenvolvimento, desregistrar o Service Worker para evitar cache de HMR
+      if (import.meta.env.DEV) {
         navigator.serviceWorker.getRegistrations().then((registrations) => {
           for (const registration of registrations) {
             registration.unregister().then((success) => {

@@ -24,11 +24,6 @@
   --color-destructive-dim: rgba(255, 69, 58, 0.08);
 }
 
-@theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 /* Prevenção de Rolagem do Navegador PWA */
 * {
   -ms-overflow-style: none;
