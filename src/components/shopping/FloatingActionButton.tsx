@@ -17,18 +17,20 @@ export default function FloatingActionButton({
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5 }}
-          className="absolute bottom-10 left-0 right-0 px-6 flex justify-center pointer-events-none z-[70]"
+          initial={{ opacity: 0, scale: 0.6, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.6, y: 20 }}
+          transition={{ type: "spring", damping: 22, stiffness: 260 }}
+          className="fixed bottom-7 left-0 right-0 max-w-md mx-auto px-6 flex justify-center pointer-events-none z-40 pb-[env(safe-area-inset-bottom)]"
         >
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.92 }}
             onClick={onClick}
-            className="pointer-events-auto bg-blue-500 text-white w-16 h-16 rounded-full shadow-[0_20px_50px_rgba(59,130,246,0.4)] border border-white/20 flex items-center justify-center relative overflow-hidden group transition-all cursor-pointer"
+            aria-label="Adicionar item"
+            className="pointer-events-auto bg-blue-600 hover:bg-blue-500 text-white w-16 h-16 rounded-full shadow-[0_12px_32px_rgba(37,99,235,0.5)] border border-white/20 flex items-center justify-center relative overflow-hidden group transition-all cursor-pointer backdrop-blur-md active:shadow-[0_6px_20px_rgba(37,99,235,0.4)]"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <Plus size={32} strokeWidth={2.5} />
           </motion.button>
         </motion.div>
