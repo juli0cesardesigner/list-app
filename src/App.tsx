@@ -1,8 +1,12 @@
 import React from "react";
 import ShoppingContainer from "@/components/shopping/ShoppingContainer";
 import PWARegistration from "@/components/PWARegistration";
+import { useWakeLock } from "@/hooks/useWakeLock";
 
 export default function App() {
+  // Mantém a tela do celular sempre ligada enquanto o app estiver aberto
+  useWakeLock();
+
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-blue-500 selection:text-white flex flex-col justify-center items-center overflow-x-hidden">
       {/* PWA Service Worker Registration */}

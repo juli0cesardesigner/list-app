@@ -51,10 +51,8 @@ export default function ShoppingContainer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col w-full"
+            className="flex flex-col w-full pt-4"
           >
-            <ShoppingHeader />
-
             <div className="flex-1 space-y-8">
               <section className="space-y-3">
                 <div className="grid gap-3">

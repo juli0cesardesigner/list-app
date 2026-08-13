@@ -51,38 +51,35 @@ export default function AddItemModal({
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, y: 80 }}
+        initial={{ opacity: 0, y: 60 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 80 }}
-        transition={{ type: "spring", damping: 25, stiffness: 220 }}
-        className="fixed inset-0 z-50 bg-black flex flex-col px-5 pt-8 pb-3"
+        exit={{ opacity: 0, y: 60 }}
+        transition={{ type: "spring", damping: 25, stiffness: 240 }}
+        className="fixed inset-0 z-50 bg-black flex flex-col px-5 pt-3 pb-3"
         style={{
           height: visibleHeight > 0 ? `${visibleHeight}px` : "100dvh",
           maxHeight: visibleHeight > 0 ? `${visibleHeight}px` : "100dvh",
         }}
       >
-        {/* Header Fixo */}
-        <div className="flex justify-between items-center mb-4 flex-shrink-0">
-          <div className="w-9" />
-          <h2 className="text-lg font-bold tracking-tight text-white">
-            Adicionar Item
-          </h2>
+        {/* Botão Fechar Sutil no Canto Superior Direito (Sem título) */}
+        <div className="flex justify-end items-center flex-shrink-0 mb-1">
           <button
             type="button"
             onClick={onClose}
-            className="p-2 bg-zinc-900 border border-zinc-800 rounded-full hover:bg-zinc-800 transition-colors text-zinc-400 focus:outline-none cursor-pointer"
+            aria-label="Fechar"
+            className="p-2 text-zinc-500 hover:text-zinc-300 rounded-full hover:bg-zinc-900 transition-colors focus:outline-none cursor-pointer"
           >
-            <X size={20} />
+            <X size={22} />
           </button>
         </div>
 
-        {/* Formulário com Scroll Interno e Botão Sticky */}
+        {/* Formulário com Campos Elevados e Largura Total */}
         <form
           onSubmit={handleSubmit}
           className="flex flex-col flex-1 min-h-0 justify-between"
         >
-          <div className="space-y-4 flex-1 overflow-y-auto overscroll-contain pr-1 py-1">
-            <div className="space-y-1.5">
+          <div className="space-y-3.5 flex-1 overflow-y-auto overscroll-contain pr-1 py-1">
+            <div className="space-y-1">
               <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-1">
                 O que comprar?
               </label>
@@ -96,29 +93,28 @@ export default function AddItemModal({
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {alternatives.map((alt, idx) => {
                 const show = idx === 0 || alternatives[idx - 1].trim() !== "";
                 if (!show) return null;
                 return (
                   <motion.div
-                    initial={{ opacity: 0, y: 6 }}
+                    initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     key={idx}
-                    className="flex gap-2.5 items-center"
+                    className="relative flex items-center w-full"
                   >
-                    <span className="text-[10px] text-zinc-600 font-black uppercase w-5 text-center">
-                      ou
-                    </span>
                     <input
                       type="text"
                       placeholder="Outra opção..."
                       value={alt}
                       onChange={(e) => handleAltChange(idx, e.target.value)}
-                      className={`flex-1 bg-transparent border rounded-2xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500/30 transition-all text-sm ${
+                      className={`w-full rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/30 transition-all text-base ${
+                        alt.trim() !== "" ? "pr-10" : ""
+                      } ${
                         alt.trim() === ""
-                          ? "border-dashed border-zinc-800 text-zinc-600"
-                          : "border-solid border-zinc-700 text-white bg-zinc-900/40"
+                          ? "bg-transparent border border-dashed border-zinc-800 text-zinc-500 placeholder:text-zinc-700"
+                          : "bg-zinc-900/50 border border-solid border-zinc-800 text-white"
                       }`}
                     />
                     {alt.trim() !== "" && (
@@ -129,7 +125,7 @@ export default function AddItemModal({
                             alternatives.filter((_, i) => i !== idx)
                           )
                         }
-                        className="p-1.5 text-zinc-500 hover:text-red-400 cursor-pointer"
+                        className="absolute right-3 p-1 text-zinc-500 hover:text-red-400 cursor-pointer"
                       >
                         <X size={16} />
                       </button>
@@ -139,11 +135,11 @@ export default function AddItemModal({
               })}
             </div>
 
-            <div className="flex flex-col items-center pt-2">
-              <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-2.5">
+            <div className="flex flex-col items-center pt-1">
+              <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-2">
                 Quantidade
               </label>
-              <div className="flex items-center bg-zinc-900/80 border border-zinc-800 rounded-3xl px-5 py-1.5 gap-6">
+              <div className="flex items-center bg-zinc-900/80 border border-zinc-800 rounded-3xl px-5 py-1 gap-6">
                 <button
                   type="button"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -166,7 +162,7 @@ export default function AddItemModal({
           </div>
 
           {/* Botão de Ação Sticky Sempre Visível Acima do Teclado */}
-          <div className="sticky bottom-0 pt-3 pb-2 bg-gradient-to-t from-black via-black/95 to-transparent z-10 flex-shrink-0">
+          <div className="sticky bottom-0 pt-2 pb-1 bg-gradient-to-t from-black via-black/95 to-transparent z-10 flex-shrink-0">
             <button
               type="submit"
               disabled={!name.trim()}
