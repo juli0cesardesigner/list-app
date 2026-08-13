@@ -48,7 +48,8 @@ export default function ShoppingContainer() {
   const [completingItem, setCompletingItem] = useState<ShoppingItem | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  const isFormOpen = isAddModalOpen || !editingItem || !completingItem || isSettingsOpen;
+  const isFormOpen =
+    isAddModalOpen || Boolean(editingItem) || Boolean(completingItem) || isSettingsOpen;
 
   const handleItemCheck = (item: ShoppingItem) => {
     if (!item.is_completed) {
@@ -194,7 +195,7 @@ export default function ShoppingContainer() {
 
       <CompleteItemModal
         item={completingItem}
-        isOpen={!completingItem}
+        isOpen={Boolean(completingItem)}
         onClose={() => setCompletingItem(null)}
         onConfirm={handleConfirmComplete}
         onSkip={handleSkipComplete}
