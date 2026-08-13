@@ -1,7 +1,10 @@
-const CACHE_NAME = "findom-cache-v1";
+const CACHE_NAME = "list-app-cache-v2";
 const ASSETS_TO_CACHE = [
   "/",
   "/manifest.json",
+  "/icon-192.png",
+  "/icon-512.png",
+  "/icon-maskable-512.png",
   "/icon.svg",
 ];
 
