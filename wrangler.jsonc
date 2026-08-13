@@ -1,6 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "lista-de-compras-finance",
-  "pages_build_output_dir": "./dist",
-  "compatibility_date": "2026-08-13"
+  "name": "list-app",
+  "compatibility_date": "2026-08-13",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
 }
