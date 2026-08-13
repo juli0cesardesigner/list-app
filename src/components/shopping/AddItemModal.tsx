@@ -1,20 +1,24 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus } from "lucide-react";
+import { MatchedHistoryResult } from "@/types/shopping";
 import { useViewport } from "@/hooks/useViewport";
+import ItemHistoryCard from "./ItemHistoryCard";
 
 interface AddItemModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAdd: (name: string, quantity: number, alternatives: string[]) => void;
+  getMatch?: (name: string) => MatchedHistoryResult | null;
 }
 
 export default function AddItemModal({
   isOpen,
   onClose,
   onAdd,
+  getMatch,
 }: AddItemModalProps) {
   const visibleHeight = useViewport();
   const [name, setName] = useState("");
@@ -30,6 +34,11 @@ export default function AddItemModal({
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
+
+  const historyMatch = useMemo(() => {
+    if (!getMatch || !name.trim()) return null;
+    return getMatch(name);
+  }, [name, getMatch]);
 
   if (!isOpen) return null;
 
@@ -61,7 +70,6 @@ export default function AddItemModal({
           maxHeight: visibleHeight > 0 ? `${visibleHeight}px` : "100dvh",
         }}
       >
-        {/* Botão Fechar Sutil no Canto Superior Direito (Sem título) */}
         <div className="flex justify-end items-center flex-shrink-0 mb-1">
           <button
             type="button"
@@ -73,12 +81,11 @@ export default function AddItemModal({
           </button>
         </div>
 
-        {/* Formulário com Campos Elevados e Largura Total */}
         <form
           onSubmit={handleSubmit}
           className="flex flex-col flex-1 min-h-0 justify-between"
         >
-          <div className="space-y-3.5 flex-1 overflow-y-auto overscroll-contain pr-1 py-1">
+          <div className="space-y-3 flex-1 overflow-y-auto overscroll-contain pr-1 py-1">
             <div className="space-y-1">
               <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-1">
                 O que comprar?
@@ -92,6 +99,9 @@ export default function AddItemModal({
                 className="w-full bg-zinc-900/80 border border-zinc-800 focus:border-blue-500/80 rounded-2xl px-4 py-3.5 outline-none focus:ring-2 focus:ring-blue-500/30 transition-all text-white placeholder:text-zinc-600 font-medium text-base"
               />
             </div>
+
+            {/* Card de Histórico e Preço Anterior */}
+            <ItemHistoryCard match={historyMatch} />
 
             <div className="space-y-2.5">
               {alternatives.map((alt, idx) => {
@@ -161,7 +171,6 @@ export default function AddItemModal({
             </div>
           </div>
 
-          {/* Botão de Ação Sticky Sempre Visível Acima do Teclado */}
           <div className="sticky bottom-0 pt-2 pb-1 bg-gradient-to-t from-black via-black/95 to-transparent z-10 flex-shrink-0">
             <button
               type="submit"

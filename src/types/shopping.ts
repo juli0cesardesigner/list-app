@@ -8,6 +8,29 @@ export interface ShoppingItem {
   created_at?: string;
 }
 
+export interface PurchaseRecord {
+  id: string;
+  user_id: string;
+  item_name: string;
+  normalized_name: string;
+  price?: number | null;
+  location?: string | null;
+  purchased_at: string;
+}
+
+export interface StoreLocation {
+  id: string;
+  name: string;
+  usage_count: number;
+  last_used_at: string;
+}
+
+export interface MatchedHistoryResult {
+  lastPurchase: PurchaseRecord;
+  allPurchases: PurchaseRecord[];
+  confidence: number;
+}
+
 export interface ParsedItemName {
   main: string;
   alternatives: string[];

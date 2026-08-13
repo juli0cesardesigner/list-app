@@ -1,16 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
 import { useShoppingList } from "@/hooks/useShoppingList";
-import ShoppingHeader from "./ShoppingHeader";
+import { usePurchaseHistory } from "@/hooks/usePurchaseHistory";
+import { ShoppingItem } from "@/types/shopping";
 import ShoppingItemCard from "./ShoppingItemCard";
 import CompletedSection from "./CompletedSection";
 import HiddenSection from "./HiddenSection";
 import FloatingActionButton from "./FloatingActionButton";
 import AddItemModal from "./AddItemModal";
 import EditItemModal from "./EditItemModal";
+import CompleteItemModal from "./CompleteItemModal";
+import SettingsModal from "./SettingsModal";
 
 export default function ShoppingContainer() {
   const {
@@ -31,7 +34,44 @@ export default function ShoppingContainer() {
     deleteItem,
   } = useShoppingList();
 
-  const isFormOpen = isAddModalOpen || !!editingItem;
+  const {
+    history,
+    frequentLocations,
+    currentSessionLocation,
+    setSessionLocation,
+    addPurchase,
+    getMatch,
+    deleteLocation,
+    clearHistory,
+  } = usePurchaseHistory();
+
+  const [completingItem, setCompletingItem] = useState<ShoppingItem | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const isFormOpen = isAddModalOpen || !!editingItem || !!completingItem || isSettingsOpen;
+
+  const handleItemCheck = (item: ShoppingItem) => {
+    if (!item.is_completed) {
+      setCompletingItem(item);
+    } else {
+      toggleComplete(item);
+    }
+  };
+
+  const handleConfirmComplete = async (
+    item: ShoppingItem,
+    price: number | null,
+    location: string
+  ) => {
+    await addPurchase(item.name, price, location);
+    toggleComplete(item);
+    setCompletingItem(null);
+  };
+
+  const handleSkipComplete = (item: ShoppingItem) => {
+    toggleComplete(item);
+    setCompletingItem(null);
+  };
 
   if (loading) {
     return (
@@ -42,7 +82,7 @@ export default function ShoppingContainer() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto flex flex-col h-full min-h-screen relative px-4 pt-8 pb-[calc(8rem+env(safe-area-inset-bottom))] overflow-y-auto overflow-x-hidden no-scrollbar bg-black text-white">
+    <div className="w-full max-w-md mx-auto flex flex-col h-full min-h-screen relative px-4 pt-4 pb-[calc(8rem+env(safe-area-inset-bottom))] overflow-y-auto overflow-x-hidden no-scrollbar bg-black text-white">
       <AnimatePresence mode="wait">
         {!isFormOpen && (
           <motion.div
@@ -51,8 +91,20 @@ export default function ShoppingContainer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col w-full pt-4"
+            className="flex flex-col w-full"
           >
+            {/* Barra superior com botão discreto de configurações */}
+            <div className="flex justify-end items-center mb-3">
+              <button
+                type="button"
+                onClick={() => setIsSettingsOpen(true)}
+                className="p-2 text-zinc-600 hover:text-zinc-300 rounded-full hover:bg-zinc-900 transition-colors cursor-pointer"
+                title="Configurações"
+              >
+                <Settings size={20} />
+              </button>
+            </div>
+
             <div className="flex-1 space-y-8">
               <section className="space-y-3">
                 <div className="grid gap-3">
@@ -61,7 +113,7 @@ export default function ShoppingContainer() {
                       <ShoppingItemCard
                         key={item.id}
                         item={item}
-                        onToggleComplete={toggleComplete}
+                        onToggleComplete={handleItemCheck}
                         onEdit={(item, e) => {
                           e.stopPropagation();
                           setEditingItem(item);
@@ -124,12 +176,34 @@ export default function ShoppingContainer() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAdd={handleAddItem}
+        getMatch={getMatch}
       />
 
       <EditItemModal
         item={editingItem}
         onClose={() => setEditingItem(null)}
         onSave={handleEditItem}
+        getMatch={getMatch}
+      />
+
+      <CompleteItemModal
+        item={completingItem}
+        isOpen={!!completingItem}
+        onClose={() => setCompletingItem(null)}
+        onConfirm={handleConfirmComplete}
+        onSkip={handleSkipComplete}
+        currentSessionLocation={currentSessionLocation}
+        frequentLocations={frequentLocations}
+      />
+
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        frequentLocations={frequentLocations}
+        onDeleteLocation={deleteLocation}
+        onAddLocation={setSessionLocation}
+        onClearHistory={clearHistory}
+        historyCount={history.length}
       />
     </div>
   );
