@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, MapPin, DollarSign, Store } from "lucide-react";
+import { X, Check, MapPin, DollarSign } from "lucide-react";
 import { ShoppingItem, parseItemName } from "@/types/shopping";
 import { useViewport } from "@/hooks/useViewport";
 
@@ -34,7 +34,7 @@ export default function CompleteItemModal({
     if (isOpen && item) {
       setPriceInput("");
       setLocation(currentSessionLocation || "");
-      setTimeout(() => inputRef.current?.focus(), 150);
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen, item, currentSessionLocation]);
 
@@ -43,7 +43,6 @@ export default function CompleteItemModal({
   const parsed = parseItemName(item.name);
 
   const handlePriceChange = (val: string) => {
-    // Permite digitação com vírgula ou ponto
     const cleaned = val.replace(/[^0-9.,]/g, "").replace(",", ".");
     setPriceInput(cleaned);
   };
@@ -60,13 +59,13 @@ export default function CompleteItemModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-sm px-0 sm:px-4">
         <motion.div
-          initial={{ opacity: 0, y: 120 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 120 }}
-          transition={{ type: "spring", damping: 26, stiffness: 260 }}
-          className="w-full max-w-md bg-zinc-950 border-t border-zinc-800 rounded-t-[32px] px-6 pt-5 pb-6 flex flex-col shadow-2xl overflow-y-auto no-scrollbar"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+          className="w-full max-w-md bg-zinc-950 border-t sm:border border-zinc-800 rounded-t-[32px] sm:rounded-3xl px-6 pt-5 pb-6 flex flex-col shadow-2xl overflow-y-auto no-scrollbar"
           style={{
             maxHeight: visibleHeight > 0 ? `${visibleHeight}px` : "90dvh",
           }}

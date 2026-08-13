@@ -60,10 +60,10 @@ export default function AddItemModal({
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, y: 60 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 60 }}
-        transition={{ type: "spring", damping: 25, stiffness: 240 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
         className="fixed inset-0 z-50 bg-black flex flex-col px-5 pt-3 pb-3"
         style={{
           height: visibleHeight > 0 ? `${visibleHeight}px` : "100dvh",
@@ -108,12 +108,7 @@ export default function AddItemModal({
                 const show = idx === 0 || alternatives[idx - 1].trim() !== "";
                 if (!show) return null;
                 return (
-                  <motion.div
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    key={idx}
-                    className="relative flex items-center w-full"
-                  >
+                  <div key={idx} className="relative flex items-center w-full">
                     <input
                       type="text"
                       placeholder="Outra opção..."
@@ -140,7 +135,7 @@ export default function AddItemModal({
                         <X size={16} />
                       </button>
                     )}
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>

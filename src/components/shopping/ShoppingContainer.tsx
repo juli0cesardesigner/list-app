@@ -48,7 +48,7 @@ export default function ShoppingContainer() {
   const [completingItem, setCompletingItem] = useState<ShoppingItem | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  const isFormOpen = isAddModalOpen || !!editingItem || !!completingItem || isSettingsOpen;
+  const isFormOpen = isAddModalOpen || !editingItem || !completingItem || isSettingsOpen;
 
   const handleItemCheck = (item: ShoppingItem) => {
     if (!item.is_completed) {
@@ -82,15 +82,15 @@ export default function ShoppingContainer() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto flex flex-col h-full min-h-screen relative px-4 pt-4 pb-[calc(8rem+env(safe-area-inset-bottom))] overflow-y-auto overflow-x-hidden no-scrollbar bg-black text-white">
+    <div className="w-full max-w-md mx-auto flex flex-col h-full min-h-screen relative px-4 pt-4 pb-[calc(7.5rem+env(safe-area-inset-bottom))] overflow-y-auto overflow-x-hidden no-scrollbar bg-black text-white">
       <AnimatePresence mode="wait">
         {!isFormOpen && (
           <motion.div
             key="main-list"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.2 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="flex flex-col w-full"
           >
             {/* Barra superior com botão discreto de configurações */}
@@ -108,7 +108,7 @@ export default function ShoppingContainer() {
             <div className="flex-1 space-y-8">
               <section className="space-y-3">
                 <div className="grid gap-3">
-                  <AnimatePresence mode="popLayout">
+                  <AnimatePresence>
                     {activeItems.map((item) => (
                       <ShoppingItemCard
                         key={item.id}
@@ -167,6 +167,12 @@ export default function ShoppingContainer() {
         )}
       </AnimatePresence>
 
+      {/* Gradiente sutil na base para suavizar a rolagem dos itens sob o botão flutuante */}
+      <div
+        className="fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-30 max-w-md mx-auto"
+        aria-hidden="true"
+      />
+
       <FloatingActionButton
         isVisible={!isFormOpen}
         onClick={() => setIsAddModalOpen(true)}
@@ -188,7 +194,7 @@ export default function ShoppingContainer() {
 
       <CompleteItemModal
         item={completingItem}
-        isOpen={!!completingItem}
+        isOpen={!completingItem}
         onClose={() => setCompletingItem(null)}
         onConfirm={handleConfirmComplete}
         onSkip={handleSkipComplete}
