@@ -1,13 +1,13 @@
 {
-  "name": "Financeiro Doméstico",
-  "short_name": "FinDom",
-  "description": "Controle financeiro doméstico e compartilhado com suporte offline",
+  "name": "Lista de Compras",
+  "short_name": "Lista",
+  "description": "Lista de compras inteligente com sincronização em nuvem e suporte offline",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#09090b",
-  "categories": ["finance", "utilities"],
+  "categories": ["shopping", "productivity", "utilities"],
   "icons": [
     {
       "src": "/icon.svg",
